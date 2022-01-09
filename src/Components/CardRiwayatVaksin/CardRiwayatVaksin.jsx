@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Card, Row, Col } from 'react-bootstrap'
+import { Card, Row, Col } from 'react-bootstrap'
 import { GiLoveInjection } from 'react-icons/gi'
 import './CardRiwayatVaksin.css'
 
@@ -35,11 +35,7 @@ const tahapVaksin =[
 function CardRiwayatVaksin() {
     
     return (
-        <>
-            <Row style={{ marginTop: '2rem' }}>
-                <Col sm={7}>
-                    Card data diri
-                </Col>
+        
                 <Col sm={4}>
                     <Card className='card-riwayat-vaksin'>
                         <Card.Body className='body-riwayat-vaksin'>
@@ -82,10 +78,6 @@ function CardRiwayatVaksin() {
                         </Card.Body>
                     </Card>
                 </Col>
-
-            </Row>
-
-        </>
     )
 }
 

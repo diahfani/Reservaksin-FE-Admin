@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import image from '../../Assets/Images/2853458.jpg'
-import { useDispatch } from "react-redux";
-import { login } from "../../Config/Redux/LoginSlice";
 import { Toaster } from "react-hot-toast";
 import { ToastError } from "../../Components/Toast/Toast";
-import { useNavigate } from "react-router-dom";
 import './Login.css'
-
+import axios from 'axios'
+import useHandleLogin from '../../Hooks/UseHandleLogin';
 
 function Login(props) {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    
+    // const navigate = useNavigate();
+    // const dispatch = useDispatch();
 
     const formKosong = {
         username: "",
@@ -26,30 +25,16 @@ function Login(props) {
     const [form, setForm] = useState(formKosong);
     const [errMsg, setErrMsg] = useState(formError);
 
-    //regex for validation
-    const isEmail =
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    // const isNIK =
-    //     /^(1[1-9]|21|[37][1-6]|5[1-3]|6[1-5]|[89][12])\d{2}\d{2}([04][1-9]|[1256][0-9]|[37][01])(0[1-9]|1[0-2])\d{2}\d{4}$/;
-
     //validation function
     const validateFormValue = (name, value) => {
         //validate username
-        if (name === "username") {
-            if (isEmail.test(value)) {
-                setErrMsg({ ...formError, username: "" });
-            } else {
-                if (isNaN(value)) {
-                    setErrMsg({ ...formError, username: "email yang Anda masukkan salah" });
-                } else {
-                    setErrMsg({ ...formError, username: "NIK yang anda masukkan salah" });
-                }
-            }
-            //validate password
-            if (name === "password" && value !== "") {
+        if (name === "username" && value !== "") {
+            setErrMsg({ ...formError, username: "" });
+        }
+        //validate password
+        if (name === "password" && value !== "") {
                 setErrMsg({ ...formError, password: "" });
             }
-        }
     };
 
     const handleChange = (event) => {
@@ -82,29 +67,77 @@ function Login(props) {
             return updatedErrorMessage;
         });
     };
+    const handleLogin = useHandleLogin();
+    const [isLoaded, setIsLoaded] = useState(false);
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     const validForm = Object.keys(form).filter((key) => form[key] !== "");
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const validForm = Object.keys(form).filter((key) => form[key] !== "");
+    //     if (validForm.length < 2) {
+    //         validateOnSubmit();
+    //     } else {
+    //         if (errMsg.username !== "" || errMsg.password !== "") {
+    //             ToastError("masih ada data yg kosong!")
+    //             return;
+    //         }
+    //         //axios
+    //         const API_URL = process.env.REACT_APP_BE_API_URL_LOCAL;
+    //         // axios
+    //         // .get(`${API_URL}/admin/login`, 
+    //         //     JSON.stringify(form),  {headers: {
+    //         //         'Accept': 'application/json',
+    //         //         'Content-type': 'application/json',
+    //         //       },}
+    //         // )
+    //         // .then((res) => {
+    //         //     console.log("isi res", res)
+    //         //     // handleLogin(res.ResponseJSON)
+    //         // })
+    //         // .catch((error) => {
+    //         //     console.log(error)
+    //         //     // setErrMsg({
+    //         //     //     ...errMsg,
+    //         //     //     password: error.response.data.meta.messages[0]
+    //         //     // })
+    //         // })
+            
+    //         //redux
+    //         // const loginData = {
+    //         //     username: form.username,
+    //         //     login: true,
+    //         // };
+    //         // dispatch(login(loginData));
+    //         // navigate("/");
+    //     }
 
-        if (validForm.length < 2) {
-            validateOnSubmit();
-        } else {
-            console.log(errMsg)
-            if (errMsg.username !== "" || errMsg.password !== "") {
-                ToastError("masih ada data yg salah!")
-                return;
+    //     console.log(validForm)
+    // };
+    const [error, setError] = useState([]);
+    const [sucessLogin, setSucessLogin] = useState(false);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(form)
+        axios
+          .post("http://localhost:9090/admin/login", form)
+          .then((resp) => {
+            console.log(resp);
+            if (resp.data.meta.status !== 200) {
+              setError(resp.data.meta.messages);
+            } else {
+              localStorage.setItem("token", resp.data.data.token);
+              setSucessLogin(true);
             }
-            const loginData = {
-                username: form.username,
-                login: true,
-            };
-            dispatch(login(loginData));
-            navigate("/");
-        }
-
-        console.log(validForm)
-    };
+          })
+          .catch((e) => {
+            console.error(e);
+            if (e.response) {
+              console.log(e.response);
+            } else if (e.request) {
+              console.log(e.request);
+            }
+          });
+      };
 
     return (
         <>
@@ -154,7 +187,7 @@ function Login(props) {
                                 </Container>
                                 <Container className='container-contact'>
                                     <span>Forgot password?</span> <br />
-                                    <span>Contact to dev@aol.com</span>
+                                    <span>Contact to dev@reservaksin.com</span>
                                 </Container>
                             </Container>
                         </Col>
