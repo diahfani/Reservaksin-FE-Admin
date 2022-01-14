@@ -8,12 +8,26 @@ import Maps from '../Maps/Maps'
 
 function ModalFaskes({ show, onHide, props }) {
 
+    const [curLoc, setCurLoc] = useState(null)
+
     const init = ({
         // namaFaskes: "",
         desa: "",
         telepon: 0,
-        alamatFaskes: ""
+        alamatFaskes: "",
+        curLoc
     })
+
+    const handleChangePreview = (event) => {
+        const nama = event.target.name;
+        const value = event.target.value;
+        // handleValidation(nama, value);
+        setCurLoc({
+            ...curLoc,
+            [nama]: value
+            // lat: value.lat, lng: value.lng,
+        });
+    }
 
     const [key, setKey] = useState('home');
 
@@ -23,11 +37,13 @@ function ModalFaskes({ show, onHide, props }) {
         desa: yup.string().required('Nama desa harus diisi!'),
         alamatFaskes: yup.string().required('Alamat lengkap faskes harus diisi!'),
         provinsi: yup.string().required('Pilih provinsi terlebih dahulu'),
-        kabupaten: yup.string().required('Pilih kabupaten terlebih dahulu'),
-        kecamatan: yup.string().required('Pilih kecamatan terlebih dahulu'),
-        kelurahan: yup.string().required('Pilih kelurahan terlebih dahulu'),
+        // kabupaten: yup.string().required('Pilih kabupaten terlebih dahulu'),
+        // kecamatan: yup.string().required('Pilih kecamatan terlebih dahulu'),
+        // kelurahan: yup.string().required('Pilih kelurahan terlebih dahulu'),
+        curLoc: yup.string().required('')
     })
 
+    console.log(curLoc)
 
     return (
         <>
@@ -79,28 +95,6 @@ function ModalFaskes({ show, onHide, props }) {
                                                     />
                                                 </Col>
                                                 <Col>
-                                                    <Form.Label>Desa</Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name='desa'
-                                                        value={values.desa}
-                                                        onChange={handleChange}
-                                                        isInvalid={errors.desa}
-                                                        placeholder="Masukkan nama desa..." />
-                                                    <Row className='row-alamat-faskes'>
-                                                        <Form.Label style={{ padding: '0' }}>Alamat</Form.Label>
-                                                        <Form.Control
-                                                            // type="text"
-                                                            as='textarea'
-                                                            name='alamatFaskes'
-                                                            value={values.alamatFaskes}
-                                                            onChange={handleChange}
-                                                            isInvalid={errors.alamatFaskes}
-                                                            placeholder="Masukkan alamat lengkap..." />
-                                                    </Row>
-                                                </Col>
-                                                <Col>
-                                                    {/* <Container> */}
                                                     <Form.Label>Telepon</Form.Label>
                                                     <Form.Control
                                                         type="text"
@@ -109,9 +103,40 @@ function ModalFaskes({ show, onHide, props }) {
                                                         onChange={handleChange}
                                                         isInvalid={errors.telepon}
                                                         placeholder="Masukkan nomor telepon..." />
-                                                    {/* </Container> */}
-
+                                                    {/* <Form.Label>Desa</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        name='desa'
+                                                        value={values.desa}
+                                                        onChange={handleChange}
+                                                        isInvalid={errors.desa}
+                                                        placeholder="Masukkan nama desa..." /> */}
+                                                    {/* <Row className='row-alamat-faskes'> */}
+                                                    <Form.Label style={{ padding: '0' }}>Alamat</Form.Label>
+                                                    <Form.Control
+                                                        // type="text"
+                                                        as='textarea'
+                                                        row={3}
+                                                        name='alamatFaskes'
+                                                        value={values.alamatFaskes}
+                                                        onChange={handleChange}
+                                                        isInvalid={errors.alamatFaskes}
+                                                        placeholder="Masukkan alamat lengkap..." />
+                                                    {/* </Row> */}
                                                 </Col>
+                                                {/* <Col> */}
+                                                {/* <Container> */}
+                                                {/* <Form.Label>Telepon</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        name='telepon'
+                                                        value={values.telepon}
+                                                        onChange={handleChange}
+                                                        isInvalid={errors.telepon}
+                                                        placeholder="Masukkan nomor telepon..." /> */}
+                                                {/* </Container> */}
+
+                                                {/* </Col> */}
 
 
                                             </Row>
@@ -122,11 +147,11 @@ function ModalFaskes({ show, onHide, props }) {
                                             <Row>
                                                 <Col>
                                                     <p>Titik lokasi</p>
-                                                    <Maps />
+                                                    <Maps curloc={curLoc} setCurLoc={setCurLoc} />
                                                 </Col>
                                                 <Col>
-                                                <Form.Label>Preview</Form.Label>
-                                                <Form.Control as="textarea" rows="3" name="address"></Form.Control>
+                                                    <Form.Label>Preview</Form.Label>
+                                                    <Form.Control as="textarea" rows="3" name="preview" onChange={handleChangePreview} value={JSON.stringify(curLoc)}></Form.Control>
                                                 </Col>
                                             </Row>
 

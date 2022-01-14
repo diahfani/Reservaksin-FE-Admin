@@ -174,7 +174,7 @@ function FormInformasiUmum({
                 <p className="form-text text-danger">{errMsg.alamat}</p>
             </div>
             <div className="row">
-                <div className={`mb-3 ${grid ? "col-md" : ""}`}>
+                <div className="mb-3">
                     <label className="form-label">Provinsi</label>
                     <select
                         name="provinsi"
@@ -206,7 +206,7 @@ function FormInformasiUmum({
                         ))}
                     </select>
                 </div>
-                <div className={`mb-3 ${grid ? "col-md" : ""}`}>
+                <div className="mb-3">
                     <label className="form-label">Kabupaten</label>
                     <select
                         name="kabupaten"
@@ -235,7 +235,7 @@ function FormInformasiUmum({
                 </div>
             </div>
             <div className="row">
-                <div className={`mb-3 ${grid ? "col-md" : ""}`}>
+                <div className="mb-3">
                     <label className="form-label">Kecamatan</label>
                     <select
                         name="kecamatan"
@@ -262,7 +262,7 @@ function FormInformasiUmum({
                         ))}
                     </select>
                 </div>
-                <div className={`mb-3 ${grid ? "col-md" : ""}`}>
+                <div className="mb-3">
                     <label className="form-label">Kelurahan</label>
                     <select
                         name="kelurahan"

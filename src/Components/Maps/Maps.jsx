@@ -7,14 +7,14 @@ import useGeolocation from "react-hook-geolocation";
 import MapsMarker from "./MapsMarker";
 import LeafletControlGeocoder from "./LeafletControlGeocode";
 
-export default function Maps() {
+export default function Maps({ curloc, setCurLoc }) {
     const geolocation = useGeolocation({
         enableHighAccuracy: true,
         timeout: 0,
         maximumAge: 0,
     });
 
-    const [curLoc, setCurLoc] = useState(null);
+    // const [curLoc, setCurLoc] = useState(null);
 
     useEffect(() => {
         if (geolocation) {
@@ -33,13 +33,13 @@ export default function Maps() {
     //         console.error(error);
     //     }
     // );
-    // console.log(curLoc?.lat)
-    // console.log(curLoc?.lng)
+    console.log(curloc?.lat)
+    console.log(curloc?.lng)
 
 
-    return curLoc?.lat ? (
+    return curloc?.lat ? (
         <MapContainer
-            center={{ lat: curLoc?.lat, lng: curLoc?.lng }}
+            center={{ lat: curloc?.lat, lng: curloc?.lng }}
             zoom={17}
             style={{ height: "300px", width: "480px" }}
         >
@@ -47,7 +47,7 @@ export default function Maps() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             ></TileLayer>
-            <MapsMarker position={curLoc}></MapsMarker>
+            <MapsMarker position={curloc}></MapsMarker>
             <LeafletControlGeocoder></LeafletControlGeocoder>
         </MapContainer>
     ) : (
